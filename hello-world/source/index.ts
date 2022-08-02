@@ -61,13 +61,42 @@ console.log(mySize)
 
 // Functions
 // always properly anottate your functions
-function calculateTax(income: number, taxYear: number): number { // we should always specify the type of the return value
+function calculateTax(income: number, taxYear = 2022): number {
+    // we should always specify the type of the return value
+
+    // function calculateTax(income: number, taxYear?: number): number {
+    // we can use a '?' if we want to make the parameter optional, but then we have to refactor the function in order for taxYear to not be undefined || we can assign the parameter a default value
+
     // return 0; // tsc infers the type of the returned value
     // return 'a'; // Type 'string' is not assignable to type 'number'
+    // if ((taxYear || 2022) < 2022) // this is one option, but not recommendable
     if (taxYear < 2022)
         return income * 1.2;
     // undefined (undefined is not a number, which will cause a bug, since we set the type of return to be a number)
     return income * 1.3
 }
 // calculateTax(10_000, 2022, 1); // Expected 2 arguments, but got 3
-calculateTax(10_000, 2022) // because you only have two parameters, you can only supply two arguments
+calculateTax(10_000) // because you only have two parameters, you can only supply two arguments
+
+// Objects
+
+let employee: {
+    readonly id: number,
+    name: string,
+    // name?: string // this should be avoided, because it does not make sense conceptually (all employees have a name)
+    // making the property optional should be reserved for things that are optional
+    // beware of the conceptual logic of the features of TypeScript you use
+    retire: (date: Date) => void
+
+} = {
+    id: 1,
+    name: 'Mosh',
+    retire: (date: Date) => {
+        console.log(date);
+
+    }
+}
+
+
+
+// sometimes, you want to make some of the properties read-only, so you don't accidentaly change them later on.
