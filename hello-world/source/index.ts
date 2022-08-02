@@ -59,3 +59,15 @@ const enum Size { Small = 1, Medium, Large }; // Medium = 2, Large = 3
 let mySize: Size = Size.Medium;
 console.log(mySize)
 
+// Functions
+// always properly anottate your functions
+function calculateTax(income: number, taxYear: number): number { // we should always specify the type of the return value
+    // return 0; // tsc infers the type of the returned value
+    // return 'a'; // Type 'string' is not assignable to type 'number'
+    if (taxYear < 2022)
+        return income * 1.2;
+    // undefined (undefined is not a number, which will cause a bug, since we set the type of return to be a number)
+    return income * 1.3
+}
+// calculateTax(10_000, 2022, 1); // Expected 2 arguments, but got 3
+calculateTax(10_000, 2022) // because you only have two parameters, you can only supply two arguments
