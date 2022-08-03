@@ -5,7 +5,7 @@ let isPublished = true;
 
 //* In TS we don't always have to annotate our variables, because the tsc or TYPESCRIPT COMPILER can infer/detect the TYPE of our variables based on their value
 
-//if you declare a variable but don't initialize it, TS will assume the type 'any'
+//if you declare a variable but don't assign a value to it, TS will assume the type 'any'
 let level;
 //the type 'any' lets you change variable types, which defeats the purpose of TS to keep TYPE STABILITY - WE SHOULD AVOID USING THIS TYPE as much as possible
 level = 1
@@ -130,4 +130,115 @@ let employee: Employee = {
     retire: (date: Date) => {
         console.log(date)
     }
+}
+
+
+// ******* UNION TYPES *******
+
+// with union types, we can give a variable or a function parameter more than one type
+// we can create a union type by using the union operator, like so '|'
+
+function kgToLbs(weight: number | string): number {
+    // Narrowing
+    if (typeof weight === 'number')
+        return weight * 2.2
+    else
+        return parseInt(weight) * 2.2
+}
+kgToLbs(10);
+kgToLbs('10kg')
+
+
+// ******* INTERSECTION TYPES *******
+
+// using an intersection type, we can combine separate types into a new type
+
+type Draggable = {
+    drag: () => void,
+}
+
+type Resizable = {
+    resize: () => void
+}
+
+type UIWidget = Draggable & Resizable // this is an intersection type
+
+let textBox: UIWidget = {
+
+    // to initialize this object, we need to implement all members of Draggable and Resizable
+    drag: () => { },
+    resize: () => { },
+}
+
+
+// ******* LITERAL TYPES *******
+
+// we use literal types when we want to limit the values we can assign to a variable
+// literal = exact or specific value
+// let quantity1: 50 | 100 = 50; // this would be valid
+// let quantity1: 50 | 100 = 100; // this would also be valid
+
+// instead of hardcoding these literal values, we can create a custom type using a type alias
+
+type Quantity = 50 | 100;
+let quantity: Quantity = 100;
+
+type Metric = 'cm' | 'inch' // lilteral types can also be strings
+
+
+// ******* NULLABLE TYPES *******
+
+// by default, TS is very strict about using 'null' and 'undefined' values, since they are a common source of bugs in our applications
+
+function greet(name: string | null | undefined) {
+    if (name)
+        console.log(name.toUpperCase());
+    else
+        console.log('Olá!');
+}
+
+// greet(null) // this is valid JS code, but our program will crash at runtime because you can not call the method .toUpperCase on a null or undefined object – this returns this error: Argument of type 'null' is not assignable to parameter of type 'string'. This happens because, in the tsconfig.json: "strict": true, /* Enable all strict type-checking options. */
+
+
+// ******* OPTIONAL CHAINING *******
+
+// when working with nullable objects, we often have to do null checks
+
+type Customer = {
+    birthday?: Date,
+};
+
+function getCustomer(id: number): Customer | null {
+    return id === 0 ? null : { birthday: new Date() }
+}
+
+let customer = getCustomer(1);
+
+//if (customer !== null && customer !== undefined); // this also works, but it is not the better way;
+
+// Optional property access operator – ?. // the piece of code after this operator only gets executed only if we have a value that is not null or undefined
+console.log(customer?.birthday?.getFullYear());
+
+// Optional element access operator – useful when we are dealing with arrays
+// if (customers !== null && customers !== undefined); 
+//    customers[0]
+// this can be simplified like so:
+//    customers?.[0]
+
+// Optional call 
+
+let log: any = null
+// log('a') // our program would crash because log is null
+log?.('a') // this piece of code will be executed only if log is referencing an actual function, otherwise it will be undefined 
+
+
+// ******* NULLISH COALESCING OPERATOR *******
+
+// when working with null or undefined values, sometimes we need to fall back to a default value
+
+let speed: number | null = null;
+let ride = {
+    // Falsy values in JS: undefined, null, '', false, 0
+    speed: speed || 30 // if speed is truthy, return that, if not, return 30
+    // but in this case, e.g., '0' would be a valid value for speed, so a more accurate way to implement this scenario is by checking for null
 }
