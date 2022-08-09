@@ -139,7 +139,7 @@ let employee: Employee = {
 // we can create a union type by using the union operator, like so '|'
 
 function kgToLbs(weight: number | string): number {
-    // Narrowing
+    // Narrowing – we will narrow down this union type into a more specific type
     if (typeof weight === 'number')
         return weight * 2.2
     else
@@ -175,8 +175,8 @@ let textBox: UIWidget = {
 
 // we use literal types when we want to limit the values we can assign to a variable
 // literal = exact or specific value
-// let quantity1: 50 | 100 = 50; // this would be valid
-// let quantity1: 50 | 100 = 100; // this would also be valid
+// let quantity: 50 | 100 = 50; // this would be valid
+// let quantity: 50 | 100 = 100; // this would also be valid
 
 // instead of hardcoding these literal values, we can create a custom type using a type alias
 
@@ -197,7 +197,7 @@ function greet(name: string | null | undefined) {
         console.log('Olá!');
 }
 
-// greet(null) // this is valid JS code, but our program will crash at runtime because you can not call the method .toUpperCase on a null or undefined object – this returns this error: Argument of type 'null' is not assignable to parameter of type 'string'. This happens because, in the tsconfig.json: "strict": true, /* Enable all strict type-checking options. */
+// greet(null) // this is valid JS code, but our program will crash at runtime because you can not call the method .toUpperCase on a null or undefined object – this returns this error: Argument of type 'null' is not assignable to parameter of type 'string'. This happens because in the tsconfig.json: "strict": true, /* Enable all strict type-checking options. */
 
 
 // ******* OPTIONAL CHAINING *******
@@ -214,9 +214,9 @@ function getCustomer(id: number): Customer | null {
 
 let customer = getCustomer(1);
 
-//if (customer !== null && customer !== undefined); // this also works, but it is not the better way;
+//if (customer !== null && customer !== undefined); // this also works, but there is a simpler way;
 
-// Optional property access operator – ?. // the piece of code after this operator only gets executed only if we have a value that is not null or undefined
+// Optional property access operator OR optional chaining operator – ?. // the piece of code after this operator only gets executed only if we have a value that is not null or undefined
 console.log(customer?.birthday?.getFullYear());
 
 // Optional element access operator – useful when we are dealing with arrays
@@ -239,6 +239,91 @@ log?.('a') // this piece of code will be executed only if log is referencing an 
 let speed: number | null = null;
 let ride = {
     // Falsy values in JS: undefined, null, '', false, 0
-    speed: speed || 30 // if speed is truthy, return that, if not, return 30
+    // speed: speed || 30 // if speed is truthy, return that, if not, return 30
     // but in this case, e.g., '0' would be a valid value for speed, so a more accurate way to implement this scenario is by checking for null
+    // speed: speed !== null ? speed: 30 // but in TS we have a better way
+    // we can simplify this expression with the:
+    // Nullish coalescing operator – '??' (it is called 'nullish' because it can refer to a value that is null or undefined)
+    speed: speed ?? 30 // if speed is not null nor undefined, use that value, otherwise use 30 as a default value
+
 }
+
+// ******* TYPE ASSERTIONS *******
+
+// sometimes, we know more about the type of an object than TypeScript
+
+
+// let phone = document.getElementById('phone')
+
+// HTMLElement is a class defined in JavaScript that represents any kind of HTML elements. It is like the base or parent class for other types of elements (like HTMLInputElement, e.g.)
+
+// These type of elements has an extra property called 'value' for reading the value entered by the user.
+// However, if we type:
+// 'phone.value' // we cannot see this property. This is where we use a type assertion.
+
+// We are telling the TypeScript compiler: 'hey, I know more about the type of this object than you do'.
+// let phone = <HTMLInputElement> document.getElementById('phone') as HTMLInputElement // let phone: HTMLInputElement using the 'as' keyword
+// phone.value
+
+// alternative to the 'as' keyword to use type assertion
+let phone = <HTMLInputElement>document.getElementById('phone')
+phone.value
+
+// beware of this, because there is no type conversion happening under the hood
+
+
+// ******* THE UNKNOWN TYPE *******
+
+// function render(document: any) {
+//     document.move();
+//     document.fly();
+//     document.whateverWeWant()
+// this is the problem with the 'any' type
+// there will be no type checking regardless of what we call it, so if there is no method with this name, our program is going to crash (errors won't be caught at compile time)
+// }
+
+// This is where we use another similar type called 'unknown' 
+// If we change the type from 'any' to 'unknown', we immediately get compilation errors
+
+function renderi(document: unknown) {
+    // Narrowing
+    // if (typeof document === 'string') {
+    //     document.toUpperCase() // this does not return a compilation error, because the compiler knows that this 'document' is a string object
+    // }
+
+    // typeof only works with primitive types (nummer, string, boolean, ...), but if we have customed objects created with classes, we have to use 'instanceof'
+
+    //     if (document instanceof WordDocument)
+
+
+    //     document.move();
+    //     document.fly();
+    //     document.whateverWeWant()
+    // }
+    // tsc is saying "Object is of type 'unknown'", meaning the compiler does not know about the type of the document and he does not know what methods are there in the object – this is when we can use type narrowing/type call
+
+    // using the unknown type is preferred to using the 'any' type, because the compiler forces us to do some type checking to make sure the methods we are calling exist on the target object 
+}
+
+// ******* THE NEVER TYPE *******
+
+// the 'never' type represents values that never occur – it is not used often
+
+function reject(message: string): never { // this is a function that will never return – it always throws an error
+    throw new Error(message)
+}
+
+
+function processEvents(): never { // by using the 'never' type, we tell the compiler that this function never returns
+    // here we have an infinite loop, meaning this function will never return
+    while (true) {
+        // read a message from a queue
+    }
+}
+
+reject('...')
+processEvents();
+// after we annotate the function return with the 'never' type, the code after this will be greyed out, meaning it will not get executed
+// console.log('Hello, world!')
+// we know this line of code will never get executed, because the previous line is a function that never returns since we have an infinite loop
+// when we disable "allowUnreachableCode": false, the compiler will detect unreachable code 
