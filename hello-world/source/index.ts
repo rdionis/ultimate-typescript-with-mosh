@@ -366,40 +366,59 @@ function processEvents(): never { // by using the 'never' type, we tell the comp
 
 // this is how we create a Class in TypeScript:
 class Account {
-    readonly id: number;
-    owner: string;
-    balance: number;
+    // readonly id: number;
+    // owner: string;
+    // private _balance: number;
     nickname?: string; // by adding a '?', we make this property optional and we don't need to add it in the constructor
+
 
     // To initialize an object's properties, we need to create a constructor. A CONSTRUCTOR is a special function or a special method inside a class that is used for initializing an object
 
     // Without the constructor, we get erros like 'Property 'balance' has no initializer and is not definitely assigned in the constructor'
 
-    constructor(id: number, owner: string, balance: number) {
+    constructor(
+        public readonly id: number,
+        public owner: string,
+        private _balance: number) {
         // this method cannot have a return type annotation, because it should always return an instance of Account – 'constructor Account(id: number, owner: string, balance: number): Account' | this construcotr always returns an instance of Account
 
         // in this method, we type 'this' to reference the current class
-        this.id = id;
-        this.owner = owner;
-        this.balance = balance;
-        // this is how we can initialize our properties
+        // this is how we can initialize the properties related to the parameters declared in the constructor:
+        // this.id = id;
+        // this.owner = owner;
+        // this._balance = _balance;
+        // every time we create a class in TypeScript, we have to repeat this pattern: create a constructor with a bunch of parameters, and write the proper initialization code in that constructor – THIS IS VERY REPETITIVE and TS offers a BETTER WAY
     }
 
     // in this class, we can also have methods:
     deposit(amount: number): void {
         if (amount <= 0)
             throw new Error('Invalid amount');
-        this.balance += amount
+        // record a transaction
+        this._balance += amount
     }
-}
 
+    // private calculateTax() {
+
+
+    // getBalance(): number { // this solution is valid, but there is a better way
+    get balance(): number { // this is called a GETTER: a 'getter' is a method inside a Class that we use for getting the value of a property 
+        return this._balance
+    }
+
+    // set balance(value: number) {
+    //     if (value < 0)
+    //         throw new Error('Invalid value');
+    //     this._balance = value
+    // }
+}
 // once we have a Class, we can create an object using that class:
 
 // using the 'new' operator, we can create an instance or an object from an existing class
 
 let account = new Account(1, 'Mosh', 0);
-account.deposit(100);
-console.log(account.balance); // returns '100'
+account.deposit(150);
+// console.log(account._balance); // returns '100' // after set to private: 'Property '_balance' is private and only accessible within class 'Account'.ts(2341)'
 console.log(account); // returns 'Account { id: 1, owner: 'Mosh', balance: 100 }'
 console.log(typeof account); // 
 console.log(account instanceof Account); // this is a boolean expression // returns 'true'
@@ -412,6 +431,165 @@ console.log(account instanceof Account); // this is a boolean expression // retu
 // if we add the 'readonly' keyword to a property, we can only set the property in the constructor and it is not possible to reset it anywhere else | we will get a compilation error if we try
 
 // account.id = 0 // This returns a compilation error: 'Cannot assign to 'id' because it is a read-only property.ts(2540)'
+
+
+// ACCESS CONTROL MODIFIERS
+
+// • public
+// • private 
+// • protected (will be talked about later on)
+
+// when we declare properties, they are 'public' by default, so we don't have to use the 'public' keyword
+// if a property is set to 'private', we can not access it from outside of the Account class, but only within this class.
+// DO NOT USE private properties to store sensitive data, like passwords and so on
+
+// by convention, when using the 'private' keyword, we add a '_' to the property name
+
+// console.log(account.getBalance());
+console.log(account.balance); // because we habe a 'getter', we can access the balance method like this
+// account.balance = 500// but we cannot set it // 'Cannot assign to 'balance' because it is a read-only property.ts(2540)'
+
+
+// PROPERTY PARAMETERS
+// GETTERS AND SETTERS
+
+// INDEX SIGNATURES – are used for creating properties dynamically in TS
+
+// in JS, we can create an empty object and add properties to it dynamically, but this is not possible in TS, because TS is very strict about the shape of objects. So in situations where we need to add properties to objects dynamically, we need to use INDEX SIGNATURES
+
+// Let's say we are building a ticketing app for concerts and for each concert we wanna know who is sitting where 
+
+class SeatAssignment {
+
+    // seats – A1, A2, ...
+    // audience members – Mosh, John, ...
+
+    // we don't want to define individual properties like:
+    // A1: string;
+    // A2: string;
+    // It is very repetitive
+
+    [seatNumber: string]: string; // this is an INDEX SIGNATURE property
+}
+
+let seats = new SeatAssignment();
+seats.A1 = 'Mosh' // same as: seats.['A1'] = 'Mosh'
+// seats.A2 = 1 // compilation error: Type 'number' is not assignable to type 'string'.ts(2322)
+
+
+// STATIC PROPERTIES – a static property is a property that belongs to a class and not an object
+
+// creating a ride sharing application like Uber
+class Ride {
+
+    // in this class, we can have properties like: passenger, pickUpLocation, dropOffLocation, ...
+
+    // we want to know how many active rides we have in our system:
+
+    private static _activeRides: number = 0; // by adding the keyword 'static', this property is set to belong to the 'Ride' class and not to the 'ride' object
+
+    start() { Ride._activeRides++; };
+    stop() { Ride._activeRides--; };
+
+    static get activeRides() {
+        return Ride._activeRides
+    }
+}
+
+let ride1 = new Ride();
+ride1.start();
+
+let ride2 = new Ride();
+ride2.start();
+ride2.stop();
+
+console.log(Ride.activeRides);
+
+
+// INHERITANCE – a mechanism that allows us to reuse our code 
+// sometimes, we deal with classes that have common properties, so we want to put them in a separate class that can be reused
+
+// Parent / Base / Super Class
+// Child / Derived Sub Class 
+
+class Person {
+    constructor(
+        public firstName: string,
+        public lastName: string) {
+    }
+
+    get fullName() {
+        return this.firstName + ' ' + this.lastName;
+    }
+
+    walk() {
+        console.log('Walking');
+
+    }
+}
+
+class Student extends Person { // the Student class will inherit everything that is part of the Person class
+    constructor(
+        public studentId: number,
+        firstName: string,
+        lastName: string) { // 'Constructors for derived classes must contain a 'super' call.ts(2377)'
+
+        super(firstName, lastName)
+    }
+    takeTest() {
+        console.log('Taking a test.');
+    }
+}
+
+let student = new Student(1, 'John', 'Krasinski')
+console.log(student);
+
+// METHOD OVERRIDING – overriding = change its implementation
+// sometimes, we want to change something in the inherited properties
+
+// on the Teacher class, we want to change the implementation of the 'fullName' getter
+class Teacher extends Person {
+    // because I dont want to add any properties, this code enough to just inherit the constructor from the 'Person' class
+
+    override get fullName() { // we are overriding this method as set on the 'Person' class
+        // this 'override' can be implicit but it is best practice to keep it explicit by enabling "noImplicitOverride": true, /* Ensure overriding members in derived classes are marked with an override modifier. */
+        // if we ommit the 'override' keyword, we will get a compilation error: "This member must have an 'override' modifier because it overrides a member in the base class 'Person'.ts(4114)"
+
+
+        return 'Professor ' + super.fullName;
+    }
+}
+
+let teacher = new Teacher('John', 'Smith');
+console.log(teacher.fullName);
+
+
+// POLYMORPHISM – one of the core principles of object-oriented programming (polymorphism = many forms)
+
+// an object can take many different forms
+
+// OPEN CLOSED PRINCIPLE – our classes should be open for extension and closed for modification: we should be able to extend them or inherit from them, but we should not modify them // polymorphism allows us to follow this guidelin
+
+class Principal extends Person {
+
+    override get fullName() {
+        return 'Principal ' + super.fullName;
+    }
+}
+
+
+
+printNames([
+    new Student(1, 'John', 'Matthews'),
+    new Teacher('Mosh', 'Hamedani'),
+    new Principal('Steven', 'Andrews')
+])
+
+function printNames(people: Person[]) {
+    for (let person of people)
+        console.log(person.fullName);
+
+}
 
 
 
