@@ -76,8 +76,6 @@ let speed = null;
 let ride = {
     speed: speed !== null && speed !== void 0 ? speed : 30
 };
-let phone = document.getElementById('phone');
-phone.value;
 function reject(message) {
     throw new Error(message);
 }
@@ -85,7 +83,6 @@ function processEvents() {
     while (true) {
     }
 }
-reject('...');
 class Account {
     constructor(id, owner, balance) {
         this.id = id;
@@ -98,4 +95,9 @@ class Account {
         this.balance += amount;
     }
 }
+let account = new Account(1, 'Mosh', 0);
+account.deposit(100);
+console.log(account.balance);
+console.log(account);
+console.log(account instanceof Account);
 //# sourceMappingURL=index.js.map

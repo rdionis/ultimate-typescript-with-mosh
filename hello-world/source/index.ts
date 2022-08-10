@@ -266,8 +266,8 @@ let ride = {
 // phone.value
 
 // alternative to the 'as' keyword to use type assertion
-let phone = <HTMLInputElement>document.getElementById('phone')
-phone.value
+// let phone = <HTMLInputElement>document.getElementById('phone')
+// phone.value
 
 // beware of this, because there is no type conversion happening under the hood
 
@@ -315,7 +315,7 @@ function processEvents(): never { // by using the 'never' type, we tell the comp
     }
 }
 
-reject('...')
+// reject('...')
 // processEvents();
 // after we annotate the function return with the 'never' type, the code after this will be greyed out, meaning it will not get executed
 // console.log('Hello, world!')
@@ -366,9 +366,10 @@ reject('...')
 
 // this is how we create a Class in TypeScript:
 class Account {
-    id: number;
+    readonly id: number;
     owner: string;
     balance: number;
+    nickname?: string; // by adding a '?', we make this property optional and we don't need to add it in the constructor
 
     // To initialize an object's properties, we need to create a constructor. A CONSTRUCTOR is a special function or a special method inside a class that is used for initializing an object
 
@@ -393,3 +394,24 @@ class Account {
 }
 
 // once we have a Class, we can create an object using that class:
+
+// using the 'new' operator, we can create an instance or an object from an existing class
+
+let account = new Account(1, 'Mosh', 0);
+account.deposit(100);
+console.log(account.balance); // returns '100'
+console.log(account); // returns 'Account { id: 1, owner: 'Mosh', balance: 100 }'
+console.log(typeof account); // 
+console.log(account instanceof Account); // this is a boolean expression // returns 'true'
+
+// if we are using a type guard to narrow down a type and you are dealing with a custom object, we should always use the 'instanceof' operator instead of the 'typeof' operator
+
+// in TS we have MODIFIERS that we can apply to our properties to help us write more robust code:
+
+// READONLY modifier and OPTIONAL properties
+// if we add the 'readonly' keyword to a property, we can only set the property in the constructor and it is not possible to reset it anywhere else | we will get a compilation error if we try
+
+// account.id = 0 // This returns a compilation error: 'Cannot assign to 'id' because it is a read-only property.ts(2540)'
+
+
+
