@@ -66,10 +66,10 @@ type DayOfWeek = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'S
 
 // • Simplify the following code snippets:
 
-let user = getUser();
-console.log(user?.address?.street);
+// let user = getUser();
+// console.log(user?.address?.street);
 
-let x = foo ?? bar()
+// let x = foo ?? bar()
 
 
 // • What is the problem in this piece of code?

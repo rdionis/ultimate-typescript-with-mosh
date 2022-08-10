@@ -13,10 +13,10 @@ let fnumbers = [1, 2, '3'];
 let numbers = [1, 2, 3];
 let otherNumbers = [];
 numbers.forEach(number => number.toFixed);
-let user = [1, 'Mosh'];
-user[1].length;
-user.find;
-user.push(1);
+let user2 = [1, 'Mosh'];
+user2[1].length;
+user2.find;
+user2.push(1);
 var Sizes;
 (function (Sizes) {
     Sizes["Small"] = "S";
@@ -72,4 +72,30 @@ let customer = getCustomer(1);
 console.log((_a = customer === null || customer === void 0 ? void 0 : customer.birthday) === null || _a === void 0 ? void 0 : _a.getFullYear());
 let log = null;
 log === null || log === void 0 ? void 0 : log('a');
+let speed = null;
+let ride = {
+    speed: speed !== null && speed !== void 0 ? speed : 30
+};
+let phone = document.getElementById('phone');
+phone.value;
+function reject(message) {
+    throw new Error(message);
+}
+function processEvents() {
+    while (true) {
+    }
+}
+reject('...');
+class Account {
+    constructor(id, owner, balance) {
+        this.id = id;
+        this.owner = owner;
+        this.balance = balance;
+    }
+    deposit(amount) {
+        if (amount <= 0)
+            throw new Error('Invalid amount');
+        this.balance += amount;
+    }
+}
 //# sourceMappingURL=index.js.map

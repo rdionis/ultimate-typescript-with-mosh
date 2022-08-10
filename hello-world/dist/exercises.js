@@ -11,4 +11,17 @@ let song = {
     releaseYear: 1992
 };
 let prices = [100, 200, 300];
+let users = [
+    {
+        name: 'John Smith',
+        age: 30,
+        occupation: 'Software engineer'
+    }, {
+        name: 'Kate Müller',
+        age: 28
+    }
+];
+let value = 'a';
+if (typeof value === 'string')
+    console.log(value.toUpperCase());
 //# sourceMappingURL=exercises.js.map

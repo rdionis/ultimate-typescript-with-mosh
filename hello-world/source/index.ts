@@ -30,15 +30,15 @@ numbers.forEach(number => number.toFixed) //we get code completion here
 // ******* TUPELS *******
 
 // 1, 'Mosh'
-let user: [number, string] = [1, 'Mosh']
+let user2: [number, string] = [1, 'Mosh']
 // let user: [number, string] = ['1', 'Mosh'] // this throws the ERROR: Type 'string' is not assignable to type 'number'.
 // let user: [number, string] = [1, 'Mosh', 2] // this throws the ERROR: Source has 3 element(s) but target allows only 2.
 // here we can also access completion for the respective type methods
-user[1].length // we see all the methods of the string objects
-user.find // we see all the methods of the array objects
+user2[1].length // we see all the methods of the string objects
+user2.find // we see all the methods of the array objects
 
 // BUT... it allows the .push method, which adds elements to the array (which is not supposed to be allowed in a tuple)
-user.push(1); // this is a gap in TS
+user2.push(1); // this is a gap in TS
 
 // it is recommended to use TUPLES with only TWO ELEMENTS
 
@@ -285,25 +285,19 @@ phone.value
 // This is where we use another similar type called 'unknown' 
 // If we change the type from 'any' to 'unknown', we immediately get compilation errors
 
-function renderi(document: unknown) {
-    // Narrowing
-    // if (typeof document === 'string') {
-    //     document.toUpperCase() // this does not return a compilation error, because the compiler knows that this 'document' is a string object
-    // }
+// typeof only works with primitive types (nummer, string, boolean, ...), but if we have customed objects created with classes, we have to use 'instanceof'
 
-    // typeof only works with primitive types (nummer, string, boolean, ...), but if we have customed objects created with classes, we have to use 'instanceof'
-
-    //     if (document instanceof WordDocument)
+//     if (document instanceof WordDocument)
 
 
-    //     document.move();
-    //     document.fly();
-    //     document.whateverWeWant()
-    // }
-    // tsc is saying "Object is of type 'unknown'", meaning the compiler does not know about the type of the document and he does not know what methods are there in the object – this is when we can use type narrowing/type call
+//     document.move();
+//     document.fly();
+//     document.whateverWeWant()
+// }
+// tsc is saying "Object is of type 'unknown'", meaning the compiler does not know about the type of the document and he does not know what methods are there in the object – this is when we can use type narrowing/type call
 
-    // using the unknown type is preferred to using the 'any' type, because the compiler forces us to do some type checking to make sure the methods we are calling exist on the target object 
-}
+// using the unknown type is preferred to using the 'any' type, because the compiler forces us to do some type checking to make sure the methods we are calling exist on the target object 
+
 
 // ******* THE NEVER TYPE *******
 
@@ -322,7 +316,7 @@ function processEvents(): never { // by using the 'never' type, we tell the comp
 }
 
 reject('...')
-processEvents();
+// processEvents();
 // after we annotate the function return with the 'never' type, the code after this will be greyed out, meaning it will not get executed
 // console.log('Hello, world!')
 // we know this line of code will never get executed, because the previous line is a function that never returns since we have an infinite loop
@@ -344,10 +338,58 @@ processEvents();
 
 // In Object-Oriented Programming, OBJECTS are the building blocks of our application
 
+// An OBJECT is a unit that contains:
+
+// • data aka state (properties)
+// • operations aka behaviour (methods)
+
+// Example: 
+
+// PERSON
+// properties: (variables that only exist inside the Person Object)
+// • name
+// • email
+
+// methods: (these are functions inside the Person Object)
+// In Object-Oriented Programming, we refer to these functions as methods. A method is a function inside an object.
+// • talk()
+// • dance()
+
+// Each Object is responsible for a single task. 
+
 
 // ******* Classes *******
 
 // A Class is a blueprint for creating objects – it is like an object factory
+// uses Pascal naming notation
 
 
+// this is how we create a Class in TypeScript:
+class Account {
+    id: number;
+    owner: string;
+    balance: number;
 
+    // To initialize an object's properties, we need to create a constructor. A CONSTRUCTOR is a special function or a special method inside a class that is used for initializing an object
+
+    // Without the constructor, we get erros like 'Property 'balance' has no initializer and is not definitely assigned in the constructor'
+
+    constructor(id: number, owner: string, balance: number) {
+        // this method cannot have a return type annotation, because it should always return an instance of Account – 'constructor Account(id: number, owner: string, balance: number): Account' | this construcotr always returns an instance of Account
+
+        // in this method, we type 'this' to reference the current class
+        this.id = id;
+        this.owner = owner;
+        this.balance = balance;
+        // this is how we can initialize our properties
+    }
+
+    // in this class, we can also have methods:
+    deposit(amount: number): void {
+        if (amount <= 0)
+            throw new Error('Invalid amount');
+        this.balance += amount
+    }
+}
+
+// once we have a Class, we can create an object using that class:
