@@ -75,7 +75,8 @@ let x = foo ?? bar()
 // • What is the problem in this piece of code?
 
 let value: unknown = 'a';
-if (typeof value === 'string')
+if (typeof value === 'string') // narrowing
     console.log(value.toUpperCase());
 
 // we get a compilation error since the method 'toUpperCase' can't be called on a type unknown object – we need to use 'narrowing'
+

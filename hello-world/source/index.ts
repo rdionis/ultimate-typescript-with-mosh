@@ -327,3 +327,27 @@ processEvents();
 // console.log('Hello, world!')
 // we know this line of code will never get executed, because the previous line is a function that never returns since we have an infinite loop
 // when we disable "allowUnreachableCode": false, the compiler will detect unreachable code 
+
+
+// ******* OBJECT-ORIENTED PROGRAMMING *******
+
+// Object-oriented programming is one of the many paradigms or styles of programming there are:
+
+// • Procedural
+// • Functional
+// • Object-oriented
+// • Event-driven
+// • Aspect-oriented
+// • ...
+
+// These programming paradigms are different ways of writing code – they are NOT programming languages. Different programming languages support different programming paradigms.
+
+// In Object-Oriented Programming, OBJECTS are the building blocks of our application
+
+
+// ******* Classes *******
+
+// A Class is a blueprint for creating objects – it is like an object factory
+
+
+
