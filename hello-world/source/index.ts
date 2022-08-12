@@ -522,7 +522,7 @@ class Person {
         return this.firstName + ' ' + this.lastName;
     }
 
-    walk() {
+    protected walk() {
         console.log('Walking');
 
     }
@@ -537,6 +537,7 @@ class Student extends Person { // the Student class will inherit everything that
         super(firstName, lastName)
     }
     takeTest() {
+        this.walk()
         console.log('Taking a test.');
     }
 }
@@ -591,5 +592,51 @@ function printNames(people: Person[]) {
 
 }
 
+// PRIVATE VS. PROTECTED MEMBERS
+
+// protected members are inherited, but private members are not // AVOID USING PROTECTED MEMBERS – Mosh only mentioned them in case we see them in other people's code
+
+// ABSTRACT CLASSES AND METHODS
+
+// ABSTRACT CLASSES
+
+// if we want to make it impossible to create an instance of the Shape Class, we must mark this class as 'abstract'
+// an abstract class is like an uncooked meal, it is not ready
+
+// Base Class
+abstract class Shape {
+    // with the 'abstract' keyword, we are telling TS that this class is 'abstract' or 'simple' or 'not ready', so another class (like Circle) has to extend it
+    constructor(public color: string) { }
+
+    abstract render(): void; // abstract methods can only exist inside abstract classes
+}
+
+class Circle extends Shape {
+    constructor(public radius: number, color: string) {
+        // here, we don't need to add the 'public' keyword, because we already defined this property in the base class
+        super(color) // we use the 'super' keyword to call the constructor from the base and pass the color
+    }
+    override render() {
+        // when we type 'render' and press Enter, VSCode automatically adds the 'override' keyword, so we don't need to remember to add it        
+        console.log('Rendering a circle')
+    }
+}
+
+// let shape = new Shape('red')
+// shape.render()
+// this is possible with the current implementation (without abstract), but it makes no sense, since a shape is not a real thing – THIS IS WHY WE USE ABSTRACT CLASSES AND METHODS
+// if we want to make it impossible to create an instance of the Shape Class, we must mark this class as 'abstract'
+
+// After adding the 'abstract' keyword, when we try to add an instance of the Shape class, like so:
+// let shape = new Shape('red')
+// shape.render()
+// ... it will return the following compilation error: 'Cannot create an instance of an abstract class.ts(2511)'
 
 
+// ABSTRACT METHODS
+
+// they can only exist inside abstract classes – if we remove the 'abstract' from the base class (line 607), we will get the following compilation error: 'Abstract methods can only appear within an abstract class.ts(1244)'
+
+// these are methods that have no implementation – there is really no way for us to implement them, just like the 'render()' method in line 611, so we need to mark it as 'abstract' as well, remove the curly braces and end the line with ';', and annotate the return type as 'void' in order to steer clear of further compilation errors, which we would get otherwise:
+//'Method 'render' cannot have an implementation because it is marked abstract.ts(1245)'
+// "'render', which lacks return-type annotation, implicitly has an 'any' return type.ts(7010)"
