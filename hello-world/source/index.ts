@@ -639,4 +639,51 @@ class Circle extends Shape {
 
 // these are methods that have no implementation – there is really no way for us to implement them, just like the 'render()' method in line 611, so we need to mark it as 'abstract' as well, remove the curly braces and end the line with ';', and annotate the return type as 'void' in order to steer clear of further compilation errors, which we would get otherwise:
 //'Method 'render' cannot have an implementation because it is marked abstract.ts(1245)'
-// "'render', which lacks return-type annotation, implicitly has an 'any' return type.ts(7010)"
+// "'render', which lacks return-type annotation, implicitly has an 'any' return 
+
+// the 'abstract' will not show up in the JS file after compilation, because it is purely a TS concept that has no representation in JS
+
+
+// INTERFACES
+
+// an interface is another building block in Object-oriented Programming
+// the purpose of an interface is to define the shape of objects
+
+// abstract class Calendar {
+//     constructor(public name: string) { }
+
+//     abstract addEvent(): void;
+//     abstract removeEvent(): void;
+// }
+//there is a better way to do this:
+interface Calendar { // we can prefix it with a capital 'I' if we want to
+    // here, we will define the shape of every calendar object
+    name: string;
+    addEvent(): void;
+    removeEvent(): void;
+}
+// this new implementation is shorter and more concise
+
+// In JS, we don't have interfaces, so this interface that we defined here is purely used by the TS compiler for type-checking.
+
+// So should we use an abstract class or an interface? It depends:
+
+//  • use an interface – when the class is not providing any logic or algorithm that subclasses can reuse | it just has method declarations(interfaces cannot have method implementations – we only specify the signature of our methods)
+
+//  • use an abstract class – when you have some logic, some algorithm with a few lines of code to share amongst subclasses
+
+interface CloudCalendar extends Calendar { // inherits all members of the Calendar interface and add something extra
+    sync(): void;
+}
+// at some point, we need concrete calendar implementations like Google Calendar:
+class GoogleCalendar implements Calendar {
+    // clickling on Ctrl + . adds the following interface implementation automatically
+    constructor(public name: string) { }
+    addEvent(): void {
+        throw new Error("Method not implemented.");
+    }
+    removeEvent(): void {
+        throw new Error("Method not implemented.");
+    }
+}
+// so now we have a class that implements the calendar interface

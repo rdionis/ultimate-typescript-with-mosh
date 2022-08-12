@@ -142,6 +142,7 @@ class Student extends Person {
         this.studentId = studentId;
     }
     takeTest() {
+        this.walk();
         console.log('Taking a test.');
     }
 }
@@ -167,5 +168,19 @@ printNames([
 function printNames(people) {
     for (let person of people)
         console.log(person.fullName);
+}
+class Shape {
+    constructor(color) {
+        this.color = color;
+    }
+}
+class Circle extends Shape {
+    constructor(radius, color) {
+        super(color);
+        this.radius = radius;
+    }
+    render() {
+        console.log('Rendering a circle');
+    }
 }
 //# sourceMappingURL=index.js.map
