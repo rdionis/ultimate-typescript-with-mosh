@@ -24,4 +24,38 @@ let users = [
 let value = 'a';
 if (typeof value === 'string')
     console.log(value.toUpperCase());
+class Logger {
+    constructor(fileName) {
+        this.fileName = fileName;
+    }
+    writeMessage(message) {
+        console.log(message + 'LALA');
+    }
+    ;
+}
+class AnotherPerson {
+    constructor(firstName, lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    get fullName() {
+        let fullName = `${this.firstName} ${this.lastName}`;
+        return fullName;
+    }
+}
+class AnotherEmployee extends AnotherPerson {
+    constructor(firstName, lastName, salary) {
+        super(firstName, lastName);
+        this.salary = salary;
+    }
+}
+let anotherEmployee = {
+    name: 'John Smith',
+    salary: 50000,
+    address: {
+        street: 'Flinders st',
+        city: 'Melbourne',
+        zipCode: 3144,
+    },
+};
 //# sourceMappingURL=exercises.js.map
