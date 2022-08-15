@@ -85,7 +85,7 @@ if (typeof value === 'string') // narrowing
 
 class Logger {
     constructor(public logFile: string) { }
-    log(message: string) { }
+    // log(message: string) { }
 }
 
 

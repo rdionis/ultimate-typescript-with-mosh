@@ -25,13 +25,9 @@ let value = 'a';
 if (typeof value === 'string')
     console.log(value.toUpperCase());
 class Logger {
-    constructor(fileName) {
-        this.fileName = fileName;
+    constructor(logFile) {
+        this.logFile = logFile;
     }
-    writeMessage(message) {
-        console.log(message + 'LALA');
-    }
-    ;
 }
 class AnotherPerson {
     constructor(firstName, lastName) {
@@ -58,4 +54,5 @@ let anotherEmployee = {
         zipCode: 3144,
     },
 };
+;
 //# sourceMappingURL=exercises.js.map

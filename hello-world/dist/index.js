@@ -194,4 +194,38 @@ class GoogleCalendar {
         throw new Error("Method not implemented.");
     }
 }
+class KeyValuePair {
+    constructor(key, value) {
+        this.key = key;
+        this.value = value;
+    }
+}
+let pair = new KeyValuePair(1, 'Apple');
+class StringKeyValuePair {
+    constructor(key, value) {
+        this.key = key;
+        this.value = value;
+    }
+}
+let anotherPair = new StringKeyValuePair('1', 'Apple');
+class AnotherKeyValuePair {
+    constructor(key, value) {
+        this.key = key;
+        this.value = value;
+    }
+}
+let yetAnotherPair = new AnotherKeyValuePair(1, 'a');
+function wrapInArray(value) {
+    return [value];
+}
+let numbersArray = wrapInArray('1');
+let anotherNumbersArray = wrapInArray(2);
+class ArrayUtils {
+    static wrapInArray(value) {
+        return [value];
+    }
+}
+let moreNumbers = ArrayUtils.wrapInArray(1);
+console.log(anotherNumbersArray);
+console.log(moreNumbers);
 //# sourceMappingURL=index.js.map

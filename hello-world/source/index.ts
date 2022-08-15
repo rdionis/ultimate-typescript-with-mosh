@@ -693,4 +693,110 @@ class GoogleCalendar implements Calendar {
 
 // ******* GENERICS *******
 
-// in this section, we'll talk about creating generic and reusable types 
+// in this section, we'll talk about creating generic and reusable types:
+
+// • Generic classes
+// • Generic functions
+// • Generic interfaces
+// • Generic constraints
+// • Type mapping
+
+
+// problems Generics try to solve
+
+
+class KeyValuePair {
+    constructor(
+        public key: number,
+        public value: string
+    ) { }
+}
+
+let pair = new KeyValuePair(1, 'Apple')
+// let pair = new KeyValuePair('1', 'Apple') // if we try to assign a string to the 'key' property here, we get a compilation error: 'Argument of type 'string' is not assignable to parameter of type 'number'.ts(2345)'
+// 2 possible solutions:
+// 1. use the 'any' type for the key – 'public key: any,' – NOT RECOMMENDED (we should avoid using 'any' as much as possible, since it takes away type safety – we have neither type-checking nor intellisense; we don't see the properties and methods available in this 'key' object  )
+
+// 2. duplicate the class:
+// But this implementation is redundant and endless
+class StringKeyValuePair {
+    constructor(
+        public key: string,
+        public value: string
+    ) { }
+}
+
+let anotherPair = new StringKeyValuePair('1', 'Apple')
+
+// To solve this, we need a generic: common and reusable solution
+
+// GENERIC CLASSES
+
+// after the class name, we type one or more generic type parameters between angle brackets <>
+// we can name it anything, but 'T' is a very common name that comes from C++
+// 'T' is short for 'Template'
+// in C++, we refer to these classes as Template Classes
+// Generic Classes in TS are the same as Template Classes in C++
+class AnotherKeyValuePair<K, V> { // here, we defined a generic type parameter
+    // '<T, U>' or '<TKey, TValue>' are other valid naming possibilities for the generic type parameters
+    constructor(
+        public key: K, // we change the 'key' type to 'T'
+        public value: V
+    ) { }
+}
+// now, when creating a new 'AnotherKeyValuePair', object, we need to supply two generic type arguments:
+let yetAnotherPair = new AnotherKeyValuePair<number, string>(1, 'a');
+
+// pair.key. // will show us all the properties and methods of string objects – we get type safety, intellisense and haven't duplicated our code – we have ONE GENERIC and REUSABLE class
+
+// if we don't supply the generic type arguments in line 748, the compiler can infer the type of 'key' and 'value' – this means that most of the time, we don't need to explicitly supply generic type arguments:
+// let yetAnotherPair = new AnotherKeyValuePair(1, 'a') // the compiler knows that 'key' is of type 'number' and 'value' is of type 'string'
+
+
+// GENERIC FUNCTIONS or METHODS
+
+// function wrapInArray(value: number) { 
+// let numbersArray = wrapInArray('1') // if we pass a string here, we get a compilation error
+
+// to make this function generic/reusable:
+// right after the function's name, we type a generic type parameter like '<T>' and then use that as the type of 'value'
+function wrapInArray<T>(value: T) {
+    return [value]
+}
+let numbersArray = wrapInArray('1') //  if we pass a string, we get a string array
+let anotherNumbersArray = wrapInArray(2) //  if we pass a number, we get a number array
+console.log(anotherNumbersArray)
+
+// we can also put the function from line 763 inside a class
+// we need to remove the 'function' keyword, since we only use it for defining stand-alone functions
+
+class ArrayUtils {
+
+    static wrapInArray<T>(value: T) {
+        return [value]
+    }
+}
+
+// let utils = new ArrayUtils() // we don't need to create this 'utils' object if the wrapInArray method is set to 'static' inside the 'ArrayUtils' class, because we know that static methods belong to classes
+// let moreNumbers = utils.wrapInArray(1)
+let moreNumbers = ArrayUtils.wrapInArray(1)
+console.log(moreNumbers)
+
+
+// GENERIC INTERFACES
+
+// http://mywebsite.com/users – the 'users' part is an endpoint for getting the list of users
+// http://mywebsite.com/products – another endpoint for getting the list of products
+
+// here we are defining an interface for presenting the result of calling one of the aforementioned API endpoints
+interface Result<T> {
+    data: T | null, // we don't want the type to be 'User' or 'Product' – we want to make it reusable, so we use a generic (we should have the '| null' here too because if we get an error, then we don't have 'data')
+    error: string | null // we should add an error here, since we might get an error when calling an API endpoint (we need the '| null' because we won't necessarily get an error)
+}
+
+function fetch<T>(url: string): Result<T> {
+    return {
+        data: null,
+        error: null // both are 'null' here for simplicity, since atm we don't care about actually calling an API endpoint
+    }
+}
