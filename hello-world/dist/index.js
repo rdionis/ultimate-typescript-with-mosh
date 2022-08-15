@@ -220,12 +220,79 @@ function wrapInArray(value) {
 }
 let numbersArray = wrapInArray('1');
 let anotherNumbersArray = wrapInArray(2);
+console.log(anotherNumbersArray);
 class ArrayUtils {
     static wrapInArray(value) {
         return [value];
     }
 }
 let moreNumbers = ArrayUtils.wrapInArray(1);
-console.log(anotherNumbersArray);
 console.log(moreNumbers);
+function fetch(url) {
+    console.log(url);
+    return {
+        data: null,
+        error: null
+    };
+}
+let resultClient = fetch('some url');
+let resultProduct = fetch('some url');
+function echo(value) {
+    return value;
+}
+echo(1);
+function echo1(value) {
+    return value;
+}
+echo1(1);
+function echo2(value) {
+    return value;
+}
+echo2({ name: 'Raquel' });
+function echo3(value) {
+    return value;
+}
+echo3({ name: 'Raquel' });
+class HumanPerson {
+    constructor(name) {
+        this.name = name;
+    }
+}
+class HumanCustomer extends HumanPerson {
+}
+function echo4(value) {
+    return value;
+}
+echo4(new HumanPerson('Anna'));
+echo4(new HumanCustomer('Lars'));
+class Store {
+    constructor() {
+        this._objects = [];
+    }
+    add(obj) {
+        this._objects.push(obj);
+    }
+}
+class CompressibleStore extends Store {
+    compress() {
+    }
+}
+class SearchableStore extends Store {
+    find(name) {
+        return this._objects.find(obj => obj.name === name);
+    }
+}
+class ProductStore extends Store {
+}
+class AnotherStore {
+    constructor() {
+        this._objects = [];
+    }
+    add(obj) {
+        this._objects.push(obj);
+    }
+}
+let anotherStore = new AnotherStore();
+anotherStore.add({ name: 'a', price: 1 });
+console.log(anotherStore);
 //# sourceMappingURL=index.js.map

@@ -785,18 +785,170 @@ console.log(moreNumbers)
 
 // GENERIC INTERFACES
 
-// http://mywebsite.com/users – the 'users' part is an endpoint for getting the list of users
+// http://mywebsite.com/clients – the 'clients' part is an endpoint for getting the list of clients
 // http://mywebsite.com/products – another endpoint for getting the list of products
 
 // here we are defining an interface for presenting the result of calling one of the aforementioned API endpoints
 interface Result<T> {
-    data: T | null, // we don't want the type to be 'User' or 'Product' – we want to make it reusable, so we use a generic (we should have the '| null' here too because if we get an error, then we don't have 'data')
+    data: T | null, // we don't want the type to be 'Client' or 'Product' – we want to make it reusable, so we use a generic (we should have the '| null' here too because if we get an error, then we don't have 'data')
     error: string | null // we should add an error here, since we might get an error when calling an API endpoint (we need the '| null' because we won't necessarily get an error)
 }
 
 function fetch<T>(url: string): Result<T> {
+    console.log(url)
     return {
         data: null,
         error: null // both are 'null' here for simplicity, since atm we don't care about actually calling an API endpoint
     }
 }
+
+interface Client {
+    username: string,
+}
+
+interface Product {
+    title: string
+}
+
+// fetch() // if we don't type a generic type argument, and simply open (), we get 'fetch(url: string): Result<unknown>'. The TS compiler can not infer the generic type argument for us – we have to explicitly specify it
+
+let resultClient = fetch<Client>('some url') // 'fetch(url: string): Result<User>' (how to read this expression: 'result' of 'user')
+// result.data. // intellisense will show us 'username'
+
+let resultProduct = fetch<Product>('some url') // 'fetch(url: string): Result<User>' (how to read this expression: 'result' of 'user')
+// result.data. // intellisense will show us 'title'
+
+
+// GENERIC CONSTRAINTS
+
+function echo<T>(value: T): T {
+    return value
+}
+
+echo(1) // we can call this function and give it any kind of value – there are no limitations
+
+// how to limit the type of objects that we can pass to this function?
+
+
+// constrain by type 
+function echo1<T extends number | string>(value: T): T {
+    return value
+}
+echo1(1) // we can only pass a value of type 'number' or 'string' here
+
+// constrain by object shape
+function echo2<T extends { name: string }>(value: T): T {
+    return value
+}
+echo2({ name: 'Raquel' }) // we can only pass objects that conform to the shape defined in line 839 (an object with a 'name' property of type 'string')
+
+// constrain by interface 
+interface HumanPerson {
+    name: string
+}
+
+function echo3<T extends HumanPerson>(value: T): T {
+    return value
+}
+echo3({ name: 'Raquel' })
+
+// constrain by class
+
+class HumanPerson {
+    constructor(
+        public name: string
+    ) { }
+}
+// now, we can pass an instance of HumanPerson or any classes that derive from HumanPerson 
+class HumanCustomer extends HumanPerson {
+}
+
+function echo4<T extends HumanPerson>(value: T): T {
+    return value
+}
+echo4(new HumanPerson('Anna')) // we can pass a new HumanPerson object
+echo4(new HumanCustomer('Lars')) // or a new HumanCustomer object
+// literally any object that is a 'HumanPerson' = an instance of HumanPerson or any classes that directly or indirectly derive from Person
+
+
+// EXTENDING GENERIC CLASSES – GENERIC CLASSES AND INHERITANCE
+
+// let's build an e-commerce platform
+interface Product {
+    name: string,
+    price: number
+}
+
+// we need a mechanism for storing these objects – we want to be able to store different kinds of objects: products, orders, shopping carts, etc.
+// we need an array for storing these objects (line 885)
+
+class Store<T> { // we make this class generic by adding a generic type parameter
+    // private _objects: T[] = [] // we initialize this property here directly instead of having it in a constructor, because it makes no sense/is unnecessary to have a new instance of the 'Store' class and give it an empty array [] – so we give the initialization responsibility to the class itself
+    //we add the 'private' keyword to 'objects' and rename it to '_objects', so that this array is only accessible inside the class Store
+
+    protected _objects: T[] = [] // so this can be inherited by child classes, we switched it from 'private' to 'protected'
+
+    add(obj: T): void {
+        this._objects.push(obj)
+    }
+}
+// 'Store' is a generic class. How can we extend it? Three diferent scenarios:
+
+// 1. Here, we are passing on the generic type parameter:
+
+class CompressibleStore<T> extends Store<T> {
+    compress() {
+
+    }
+}
+
+// let store = new CompressibleStore<Product>();
+// store.compress()
+
+// 2. Here, we are restricting the generic type parameter:
+class SearchableStore<T extends { name: string }> extends Store<T> {
+    find(name: string): T | undefined {
+        return this._objects.find(obj => obj.name === name)
+    }
+
+}
+
+// 3. Here, we don't have a generic type parameter, because we are dealing with a very specific store:
+
+class ProductStore extends Store<Product> {
+    //filterByCategory(category: string): Product[] {
+    //return []
+    //}
+}
+
+
+// THE KEYOF OPERATOR
+interface AnotherProduct {
+    name: string;
+    price: number;
+}
+
+class AnotherStore<T> {
+    protected _objects: T[] = [];
+
+    add(obj: T): void {
+        this._objects.push(obj)
+    }
+
+    // T is Product
+    // keyof T returns 'name' | 'price'
+    // the keyof operator returns a union of properties of the given type
+    // we can only call either 'name' or 'price' when calling this method
+
+    find(property: keyof T, value: unknown): T | undefined {
+        return this._objects.find(obj => obj[property] === value);
+    }
+}
+
+let anotherStore = new AnotherStore<AnotherProduct>();
+anotherStore.add({ name: 'a', price: 1 });
+anotherStore.find('name', 'a');
+anotherStore.find('price', 1)
+// anotherStore.find('nonExistingProperty', 1) // "Argument of type '"nonExistingProperty"' is not assignable to parameter of type 'keyof AnotherProduct'."
+
+
