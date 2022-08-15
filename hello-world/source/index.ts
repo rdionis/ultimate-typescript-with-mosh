@@ -952,3 +952,18 @@ anotherStore.find('price', 1)
 // anotherStore.find('nonExistingProperty', 1) // "Argument of type '"nonExistingProperty"' is not assignable to parameter of type 'keyof AnotherProduct'."
 
 
+// TYPE MAPPING
+
+// sometimes we need to base a type on another type – this is called TYPE MAPPING
+
+interface yetAnotherProduct {
+    name: string;
+    price: number;
+}
+
+// for type mapping, we need to create a type alias; we cannot use an interface
+type ReadOnlyProduct = {
+    // Index Signature – we are going to use the index signature to dynamically add properties
+    // keyof Operator – we are going to dynamically get the properties of the 'yetAnotherProduct' type
+    [Property in keyof yetAnotherProduct]
+}
