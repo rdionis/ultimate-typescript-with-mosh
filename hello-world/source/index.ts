@@ -689,3 +689,8 @@ class GoogleCalendar implements Calendar {
 // so now we have a class that implements the calendar interface
 
 // In TypeScript, interfaces and type aliases can be used interchangeably. 
+
+
+// ******* GENERICS *******
+
+// in this section, we'll talk about creating generic and reusable types 
