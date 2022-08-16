@@ -740,7 +740,7 @@ let anotherPair = new StringKeyValuePair('1', 'Apple')
 class AnotherKeyValuePair<K, V> { // here, we defined a generic type parameter
     // '<T, U>' or '<TKey, TValue>' are other valid naming possibilities for the generic type parameters
     constructor(
-        public key: K, // we change the 'key' type to 'T'
+        public key: K, // we change the 'key' type to 'K'
         public value: V
     ) { }
 }
@@ -781,7 +781,6 @@ class ArrayUtils {
 // let moreNumbers = utils.wrapInArray(1)
 let moreNumbers = ArrayUtils.wrapInArray(1)
 console.log(moreNumbers)
-
 
 // GENERIC INTERFACES
 
@@ -944,6 +943,7 @@ class AnotherStore<T> {
         return this._objects.find(obj => obj[property] === value);
     }
 }
+
 
 let anotherStore = new AnotherStore<AnotherProduct>();
 anotherStore.add({ name: 'a', price: 1 });
