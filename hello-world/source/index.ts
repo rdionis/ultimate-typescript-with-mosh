@@ -956,14 +956,63 @@ anotherStore.find('price', 1)
 
 // sometimes we need to base a type on another type – this is called TYPE MAPPING
 
-interface yetAnotherProduct {
+interface YetAnotherProduct {
     name: string;
     price: number;
 }
 
-// for type mapping, we need to create a type alias; we cannot use an interface
-type ReadOnlyProduct = {
-    // Index Signature – we are going to use the index signature to dynamically add properties
-    // keyof Operator – we are going to dynamically get the properties of the 'yetAnotherProduct' type
-    [Property in keyof yetAnotherProduct]
+// what if, somwhere else in our application, we need a 'yetAnotherProduct' with readonly properties?
+// This is where we use Type Mapping.
+// We create a new type based on an existing type
+// but in this new type, we want to add all the properties from the original type dynamically and make them readonly
+
+type ReadOnlyYetAnotherProduct = { // for type mapping, we need to create a TYPE ALIAS; we cannot use an interface
+
+    // instead of hardcoding the properties, we are going to use:
+    // Index Signature – to dynamically add properties
+    // keyof Operator – to dynamically get the properties of the 'yetAnotherProduct' type
+    readonly [Property in keyof YetAnotherProduct]: YetAnotherProduct[Property]
+    // we can use 'Property' or 'P' or 'K'
+    // this is similar to a 'for loop'
+    // using the 'keyof' operator, we are getting all the keys for properties of 'yetAnotherProduct'
+    // using the 'in' operator, we are iterating over these keys
+    // and 'Property', in each iteration, is going to hold one the property names in 'yetAnotherProduct'
+    // so we are getting all the keys of 'yetAnotherProduct' as well as their type
 }
+
+let product: ReadOnlyYetAnotherProduct = {
+    name: 'a',
+    price: 1
+    // these properties are automatically readonly, so we cannot change them later
+}
+// product.name = 'b' // We get the compilation error: 'Cannot assign to 'name' because it is a read-only property.ts(2540)'
+
+// if we want to use this readonly type for other objects, we can change it into a Generic Type
+
+//type ReadOnly<T> = { // using a generic type parameter
+// readonly [K in keyof T]: T[K]
+//}
+
+// now, we can create a readonly product, a readonly customer or any kind of object
+let anotherProduct: Readonly<YetAnotherProduct> = { // Readonly type is built in to TS
+    name: 'a',
+    price: 2
+    // these properties are automatically readonly, so we cannot change them later
+}
+console.log(anotherProduct)
+// anotherProduct.name = 'f' // compilation error: Cannot assign to 'name' because it is a read-only property.ts(2540)
+
+// using the same technique, we can create a 'YetAnotherProduct' type with all optional properties
+
+type Optional<T> = { // making all the properties optional
+    [K in keyof T]?: T[K]
+}
+// same as Partial<Type>
+
+// similarly, we can create another type and make all the properties nullable
+
+type Nullable<T> = { // para este acho que n há utility type
+    [K in keyof T]: T[K] | null
+}
+
+// these types are built into TS as utility types: https://www.typescriptlang.org/docs/handbook/utility-types.html

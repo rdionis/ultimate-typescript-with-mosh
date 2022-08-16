@@ -291,8 +291,21 @@ class AnotherStore {
     add(obj) {
         this._objects.push(obj);
     }
+    find(property, value) {
+        return this._objects.find(obj => obj[property] === value);
+    }
 }
 let anotherStore = new AnotherStore();
 anotherStore.add({ name: 'a', price: 1 });
-console.log(anotherStore);
+anotherStore.find('name', 'a');
+anotherStore.find('price', 1);
+let product = {
+    name: 'a',
+    price: 1
+};
+let anotherProduct = {
+    name: 'a',
+    price: 2
+};
+console.log(anotherProduct);
 //# sourceMappingURL=index.js.map
