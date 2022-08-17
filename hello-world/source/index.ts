@@ -1259,11 +1259,11 @@ console.log(vehicle)
 // IMPORTING and EXPORTING
 
 //this should be at the top of the file
-import { Circle as MyCircle } from './shapes' // if necessary, we can rename it here with the 'as' keyword, in order to avoid name clashes
+// import { Circle as MyCircle, Square } from './shapes' // if necessary, we can rename it here with the 'as' keyword, in order to avoid name clashes
 
 // import { Circle } from './shapes' // because we already have a 'Circle' class in this file, this implementation returns this error: 'Import declaration conflicts with local declaration of 'Circle'.ts(2440)'
-let circle = new MyCircle(1);
-console.log(circle.radius)
+// let circle = new MyCircle(1);
+// console.log(circle.radius)
 // let circle = new MyCircle(1);
 
 // MODULE FORMATS
@@ -1285,3 +1285,14 @@ import SpecialStore, { Format } from './storage';
 let specialStore = new SpecialStore
 
 // default exports can also coexist with named exports
+
+
+// WILDCARD IMPORTS
+
+// sometimes, we need quite a few object from a module, so importing them one by one can be a bit of a hassle
+// in these case, we can use a wildcard import to simplify our code
+
+// import { Circle as MyCircle, Square } from './shapes' – this can be replaced by:
+import * as Shapes from './shapes' // this is a wildcard import
+// we are importing all the exported objects from this module and putting them inside a container called 'Shapes'
+let circle = new Shapes.SpecialCircle(1)

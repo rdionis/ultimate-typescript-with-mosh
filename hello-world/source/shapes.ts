@@ -1,4 +1,4 @@
-export class Circle {
+export class SpecialCircle {
     constructor(public radius: number) {
 
     }
