@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,7 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
 let sales = 123456789;
 let course = 'Typescript';
 let isPublished = true;
@@ -417,7 +422,9 @@ __decorate([
 console.log(watchedParameters);
 let vehicle = new Vehicle();
 console.log(vehicle);
-import { Circle as MyCircle } from './shapes';
-let circle = new MyCircle(1);
-console.log(circle.radius);
+const storage_1 = __importDefault(require("./storage"));
+let specialStore = new storage_1.default;
+const tax_1 = require("./tax");
+let tax = (0, tax_1.calculateOtherTax)();
+console.log(tax);
 //# sourceMappingURL=index.js.map

@@ -1316,4 +1316,18 @@ import { SpecialCircle, Square } from './shapes';
 // • Declaration (Type Definition)
 // • Using declaration files from @types/
 
-// INCL
+// INCLUDING JS CODE IN TS PROJECTS
+
+import { calculateOtherTax } from './tax'
+
+let tax = calculateOtherTax();
+// Why does the tsc not complain even though we are not supplying any arguments to this function? This is why: if you don't supply an argument, 'undefined' will be passed to this function and because the type of the 'income' parameter is 'any', it can receive any type of argument, meaning it can also receive 'undefined'
+console.log(tax)
+
+
+// ENABLING TYPE-CHECKING in JS CODE
+
+// Enabling '"checkJs": true' in the tsconfig.json will provide us with some basic type-checking
+
+
+// DESCRIBING TYPES USING JSDOC
