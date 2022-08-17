@@ -1244,3 +1244,14 @@ console.log(watchedParameters)
 
 
 // ******* MODULES *******
+
+//  how to use modules to organise our code
+
+// • Creating and using modules
+// • Module formats – how to configure the tsc to generate code for different formats
+// • Additional techniques:
+    // • Default exports
+    // • Wildcard imports
+    // • Re-exporting
+
+// IMPORTING and EXPORTING
