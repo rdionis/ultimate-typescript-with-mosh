@@ -1280,3 +1280,8 @@ console.log(circle.radius)
 
 // sometimes, we just want to export a single thing from a module – in these cases, it is better to use a default export
 
+import SpecialStore, { Format } from './storage';
+
+let specialStore = new SpecialStore
+
+// default exports can also coexist with named exports
