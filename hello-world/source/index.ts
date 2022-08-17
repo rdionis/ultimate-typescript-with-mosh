@@ -1320,7 +1320,7 @@ import { SpecialCircle, Square } from './shapes';
 
 import { calculateOtherTax } from './tax'
 
-let tax = calculateOtherTax();
+let tax = calculateOtherTax(10_000);
 // Why does the tsc not complain even though we are not supplying any arguments to this function? This is why: if you don't supply an argument, 'undefined' will be passed to this function and because the type of the 'income' parameter is 'any', it can receive any type of argument, meaning it can also receive 'undefined'
 console.log(tax)
 
@@ -1331,3 +1331,5 @@ console.log(tax)
 
 
 // DESCRIBING TYPES USING JSDOC
+// one way to describe type information to our JS code is to use JSDoc, which is a special comment we can add to our code 
+// see file 'tax.js'

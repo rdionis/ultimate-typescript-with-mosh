@@ -425,6 +425,6 @@ console.log(vehicle);
 const storage_1 = __importDefault(require("./storage"));
 let specialStore = new storage_1.default;
 const tax_1 = require("./tax");
-let tax = (0, tax_1.calculateOtherTax)();
+let tax = (0, tax_1.calculateOtherTax)(10000);
 console.log(tax);
 //# sourceMappingURL=index.js.map
