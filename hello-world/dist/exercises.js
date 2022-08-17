@@ -55,4 +55,15 @@ let anotherEmployee = {
     },
 };
 ;
+function echo5(arg) {
+    return arg;
+}
+function printName(obj) {
+    console.log(obj.name);
+}
+class Entity {
+    constructor(id) {
+        this.id = id;
+    }
+}
 //# sourceMappingURL=exercises.js.map

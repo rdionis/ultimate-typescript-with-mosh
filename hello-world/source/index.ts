@@ -1016,3 +1016,231 @@ type Nullable<T> = { // para este acho que n há utility type
 }
 
 // these types are built into TS as utility types: https://www.typescriptlang.org/docs/handbook/utility-types.html
+
+
+// ******* DECORATORS *******
+
+// allow us to change and enhance our classes
+
+// • What are decorators
+// • Class decorators
+// • Method decorators
+// • Property decorators
+// • Accessor decorators
+// • Parameter decorators
+
+// What are decorators?
+// Decorators are attributes that we apply to our classes and their members, allowing us to change their behaviour.
+// They are frequently used in Angular and Vue applications – these frameworks have built-in decorators
+// TS does not have any built-in decorators, so we have to create our own
+
+// before we can build in any decorators, we have to enable a special compiler option, because decorators are an experimental feature and their standards and implementation might change in the future: 'Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.ts(1219)'
+
+// enabling "experimentalDecorators": true, /* Enable experimental support for TC39 stage 2 draft decorators. */
+
+// decorators use Pascal naming convention
+
+// CLASS DECORATORS
+
+// function Component(constructor: Function) {
+//     // depending on where we are going to apply this decorator, the number and type of parameters vary
+//     // if we apply to a class, we should have a single parameter that represents the constructor function – we can call it anything, but it is better to call it 'constructor'
+//     // what matters is the type –  if the type is a function, the runtime assumes that we are going to apply this decorator on a class and the 'constructor' parameter represents our constructor function
+//     // in this decorator function, we have the chance to modify/enhance our class: we can add/change/delete properties and methods
+//     console.log('Component decorator called');
+//     constructor.prototype.uniqueId = Date.now();
+//     constructor.prototype.insertInDOM = () => console.log('Inserting the component in the DOM')
+//     // PROTOTYPES – every object in JS has a prototype from which it inherits various properties and methods
+// }
+// @Component
+// under the hood, this decorator is just a function that gets called by JS at runtime
+// in this function, we have the chance to modify this class, so we can add new properties, new methods or we can change the implementation of existing methods
+// class ProfileComponent {
+// every instance of the 'ProfileComponent' is gonna have the new members set in the 'Component' function
+// }
+
+// instead of defining a decorator, we could define a base class called 'Component', like so:
+// class Component { // base class
+//    insertInDOM() { }
+// }
+
+//class ProfileComponent extends Component {
+
+// } // this is another way to solve this problem, without using decorators 
+
+// PARAMETERIZED DECORATORS
+
+type ComponentOptions = {
+    selector: string
+}
+
+
+// decorator factory – the following function is acting as a factory for creating a decorator
+function Component(options: ComponentOptions) {
+    return (constructor: Function) => {
+        console.log('Component decorator called.')
+        constructor.prototype.options = options;
+        constructor.prototype.uniqueId = Date.now();
+        constructor.prototype.insertInDOM = () => {
+            console.log('Inserting the component in the DOM')
+        }
+    }
+
+}
+
+// @Component({ selector: '#my-profile' }) // we are passing an object as an argument to this decorator
+// class ProfileComponent {
+// }
+
+
+// DECORATOR COMPOSITION
+// we can also apply multiple decorators to a class or its members
+
+function Pipe(constructor: Function) {
+    console.log('Pipe decorator called.')
+    constructor.prototype.pipe = true;
+}
+
+@Component({ selector: '#my-profile' }) // we are passing an object as an argument to this decorator
+@Pipe
+// decorators are called in reverse order:
+// first, our pipe decorator gets called with the 'ProfileComponent' class and then the result gets passed to the 'Component' decorator
+class ProfileComponent {
+}
+
+
+// METHOD DECORATORS
+
+// to apply a decorator to a method, we need three different types of parameters:
+// first: the object that owns the target method
+// second: the name of the target method
+// third: descriptor object for the target method
+
+function Log(target: any, methodName: string, descriptor: PropertyDescriptor) {
+
+    const original = descriptor.value as Function
+    descriptor.value = function (...args: any) {
+        console.log('Before')
+        original.call(this, ...args)
+        console.log('After')
+    }
+}
+// in this case, 'any' is the type that the tsc expects from us
+// PropertyDescriptor – every property in an object has a descriptor object to describe that property
+class SpecialPerson {
+    @Log
+
+    say(message: string) {
+        console.log('Special Person says ' + message)
+
+    }
+}
+
+let specialPerson = new SpecialPerson();
+specialPerson.say('Hello')
+
+
+// ACCESSOR DECORATORS
+// decorators that apply to getters and setters 
+// very similar to method decorators
+
+
+function Capitalize(
+    target: any,
+    methodName: string,
+    descriptor: PropertyDescriptor
+) {
+    const original = descriptor.get;
+    descriptor.get = function () {
+        // original?.call(this) // here, we are calling the original getter
+        // the line above is the shorthand for the following:
+        // if (original !== null && original !== undefined)
+        //  original.call(this)
+
+        // but since here we will be applying the method to a getter, so we know that 'original' will not be null or undefined, we can type:
+        const result = original!.call(this);
+        // in the line above, we are telling the compiler: 'I know this is not gonna be null or undefined, so trust me.'
+        return (typeof result === 'string') ? result.toUpperCase() : result
+    }
+}
+
+class AmazingPerson {
+    constructor(public firstName: string, public lastName: string) { }
+
+    @Capitalize
+    get fullName() {
+        return `${this.firstName} ${this.lastName}`
+    }
+}
+
+let amazingPerson = new AmazingPerson('raquel', 'dionísio');
+console.log((amazingPerson.fullName))
+
+
+// PROPERTY DECORATORS
+// decorators that enhance existing properties
+// very similar to method decorators
+
+function MinLength(length: number) {
+    // here we are returning the proper decorator function
+    return (target: any, propertyName: string) => {
+
+        let value: string;
+        // we don't a have a 'PropertyDescriptor' like in method decorators – instead, we define here a property descriptor for the target property:
+        const descriptor: PropertyDescriptor = {
+            get() {
+                return value
+            },
+            // here we can define a setter for the target property and in that setter we can perform data validation – so if the new value is less than 4 char. long, we can throw an error
+            set(newValue: string) {
+                if (newValue.length < length) // we specify length in the function declaration (line 1184)
+                    throw new Error(`The ${propertyName} should be at least ${length} characters long.`)
+                value = newValue
+            }
+        }
+        Object.defineProperty(target, propertyName, descriptor)
+    }
+}
+
+class SpecialUser {
+
+    @MinLength(4) // here, we want to ensure that our passwords have a minimum length of 4 characters
+    password: string;
+    constructor(password: string) {
+        // here, we can not type 'constructor(public password: string)' and erase line 1186, because we want to apply a decorator to the property itself
+        this.password = password
+    }
+}
+
+let specialUser = new SpecialUser('1234')
+// specialUser.password = '1' // this will throw an error
+console.log(specialUser.password)
+
+// every time we try to set the password, the decorator gets called and validates the new value
+
+
+// PARAMETER DECORATORS
+// not something you use often
+
+type WatchedParameter = {
+    methodName: string,
+    parameterIndex: number
+}
+
+const watchedParameters: WatchedParameter[] = []
+// variable watchedParameters is of type 'WatchedParameter' array and here we initiliaze it to an empty array
+
+function Watch(target: any, methodName: string, parameterIndex: number) {
+    watchedParameters.push({
+        methodName,
+        parameterIndex
+    })
+}
+class Vehicle {
+    move(@Watch speed: number) { }
+}
+
+console.log(watchedParameters)
+
+
+// ******* MODULES *******
