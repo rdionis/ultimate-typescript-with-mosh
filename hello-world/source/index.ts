@@ -1242,6 +1242,8 @@ class Vehicle {
 
 console.log(watchedParameters)
 
+let vehicle = new Vehicle()
+console.log(vehicle)
 
 // ******* MODULES *******
 
@@ -1250,8 +1252,17 @@ console.log(watchedParameters)
 // • Creating and using modules
 // • Module formats – how to configure the tsc to generate code for different formats
 // • Additional techniques:
-    // • Default exports
-    // • Wildcard imports
-    // • Re-exporting
+// • Default exports
+// • Wildcard imports
+// • Re-exporting
 
 // IMPORTING and EXPORTING
+
+//this should be at the top of the file
+
+import { Circle as MyCircle } from './shapes' // if necessary, we can rename it here with the 'as' keyword, in order to avoid name clashes
+
+// import { Circle } from './shapes' // because we already have a 'Circle' class in this file, this implementation returns this error: 'Import declaration conflicts with local declaration of 'Circle'.ts(2440)'
+
+let circle = new MyCircle(1);
+console.log(circle.radius)
