@@ -1333,3 +1333,27 @@ console.log(tax)
 // DESCRIBING TYPES USING JSDOC
 // one way to describe type information to our JS code is to use JSDoc, which is a special comment we can add to our code 
 // see file 'tax.js'
+
+
+// CREATING DECLARATION/TYPE DEFINITION FILES
+
+// another way to provide type information to the TS compiler – useful if we don't want to modify our JS Code
+// we have to describe all the features in the taget module – anything we don't describe will be invisible to the compiler
+
+// see file 'tax.d.ts'
+
+// USING DEFINITELY TYPED DECLARATION FILES
+
+// let's talk about using third party JS libraries in our TS projects
+// npm i lodash
+// lodash is a very popular utility library
+
+import * as _ from 'lodash' // 'Could not find a declaration file for module 'lodash'.' – this is because lodash is a pure JS library:
+// it does not have JSDoc comments;
+// it does not have declaration files.
+// For this, we can use a very popular GitHub repository called DefinitelyTyped.
+// In this repository, we can find declaration files for all the popular JS libraries:
+// npm i --save-dev @types/lodash – @types is the repository, 'lodash' is the target package
+// we use '--save-dev' to install this as a development dependency
+
+_.clone([1,2,3])

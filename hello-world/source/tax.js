@@ -9,11 +9,12 @@
  * // @ param {*} income // we see here we have a parameter called 'income' and between {} we have the type of the parameter
  * // at this point, VSCode does not know the type of this parameter, which is why we have an * here
  * // we have to do that explicitly:
- * @param {number} income
+ * @param {number} income – Net salary after expenses.
  * // @ returns // here, we can also specify the type of the return value:
  * @returns {number}
  */
 // using JSDoc, we can provide type information to our TS compiler, but we can also explain our code – see line 8
+// similarly, we can explain each parameter – see line 12
 export function calculateOtherTax(income) {
     return income * .3
 }
