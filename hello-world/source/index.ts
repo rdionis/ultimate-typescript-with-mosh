@@ -1293,6 +1293,27 @@ let specialStore = new SpecialStore
 // in these case, we can use a wildcard import to simplify our code
 
 // import { Circle as MyCircle, Square } from './shapes' – this can be replaced by:
-import * as Shapes from './shapes' // this is a wildcard import
+// import * as Shapes from './shapes/shapes' // this is a wildcard import
+// import * as SpecialCircle from "./shapes/SpecialCircle";
 // we are importing all the exported objects from this module and putting them inside a container called 'Shapes'
-let circle = new Shapes.SpecialCircle(1)
+// let circle = new SpecialCircle.SpecialCircle(1)
+
+
+// RE-EXPORTING
+
+// with re-exporting, we can have a single module combine the exports of different modules
+
+// import { SpecialCircle, Square } from './shapes/index'; // we are not even required to type index
+import { SpecialCircle, Square } from './shapes';
+
+
+// ******* INTEGRATING JS CODE *******
+// how to run TS and JS code side by side
+
+// • Including JS code in TS projects
+// • Type-checking JS code
+// • JSDocs
+// • Declaration (Type Definition)
+// • Using declaration files from @types/
+
+// INCL
