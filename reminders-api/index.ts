@@ -51,3 +51,7 @@ app.listen(8000, () => console.log('Server started in port 8000.'))
 
 
 // PARSING REQUEST BODIES
+// see reminders.ts
+
+
+// BUILDING AN API
