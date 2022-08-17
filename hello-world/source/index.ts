@@ -1356,4 +1356,4 @@ import * as _ from 'lodash' // 'Could not find a declaration file for module 'lo
 // npm i --save-dev @types/lodash – @types is the repository, 'lodash' is the target package
 // we use '--save-dev' to install this as a development dependency
 
-_.clone([1,2,3])
+_.clone([1, 2, 3])
