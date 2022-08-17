@@ -1042,9 +1042,8 @@ type Nullable<T> = { // para este acho que n há utility type
 
 // CLASS DECORATORS
 
-// function Component(constructor: Function) {
-//     // depending on where we are going to apply this decorator, the number and type of parameters vary
-//     // if we apply to a class, we should have a single parameter that represents the constructor function – we can call it anything, but it is better to call it 'constructor'
+// function Component(constructor: Functilet circle = new MyCircle(1);
+// console.log(circle.radius)
 //     // what matters is the type –  if the type is a function, the runtime assumes that we are going to apply this decorator on a class and the 'constructor' parameter represents our constructor function
 //     // in this decorator function, we have the chance to modify/enhance our class: we can add/change/delete properties and methods
 //     console.log('Component decorator called');
@@ -1245,6 +1244,7 @@ console.log(watchedParameters)
 let vehicle = new Vehicle()
 console.log(vehicle)
 
+
 // ******* MODULES *******
 
 //  how to use modules to organise our code
@@ -1259,10 +1259,24 @@ console.log(vehicle)
 // IMPORTING and EXPORTING
 
 //this should be at the top of the file
-
 import { Circle as MyCircle } from './shapes' // if necessary, we can rename it here with the 'as' keyword, in order to avoid name clashes
 
 // import { Circle } from './shapes' // because we already have a 'Circle' class in this file, this implementation returns this error: 'Import declaration conflicts with local declaration of 'Circle'.ts(2440)'
-
 let circle = new MyCircle(1);
 console.log(circle.radius)
+// let circle = new MyCircle(1);
+
+// MODULE FORMATS
+
+// older module formats:
+// • AMD
+// • UMD
+// • CommonJS
+
+// • ES2015/ES6 – from here on, modules have becomme natively supported in JS 
+
+
+// DEFAULT EXPORTS
+
+// sometimes, we just want to export a single thing from a module – in these cases, it is better to use a default export
+

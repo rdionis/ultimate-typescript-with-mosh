@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9,7 +8,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
 let sales = 123456789;
 let course = 'Typescript';
 let isPublished = true;
@@ -419,7 +417,7 @@ __decorate([
 console.log(watchedParameters);
 let vehicle = new Vehicle();
 console.log(vehicle);
-const shapes_1 = require("./shapes");
-let circle = new shapes_1.Circle(1);
+import { Circle as MyCircle } from './shapes';
+let circle = new MyCircle(1);
 console.log(circle.radius);
 //# sourceMappingURL=index.js.map
